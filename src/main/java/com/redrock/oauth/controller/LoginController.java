@@ -24,6 +24,7 @@ public class LoginController {
 private UserService userService;
     /**
      * 登陆注册接口
+     *
      */
     @RequestMapping("/register")
     public Object register(String username,String password,String status) throws Exception {

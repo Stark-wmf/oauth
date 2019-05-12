@@ -21,6 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 public class RedirectController {
 private UserService userService;
 
+    /**
+     * 第三方登录接口
+     * @param code
+     * @return  0,"code 错误或过期",null  或者  1,"user_info",用户信息
+     */
     @RequestMapping("/redirectlogin")
     public Object redirectlogin(String code){
         return   userService.redirectlogin(code);

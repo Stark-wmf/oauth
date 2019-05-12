@@ -25,13 +25,13 @@ public class LoginConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> interceptorSet = new ArrayList<>();
-        //本服务
-        interceptorSet.add("/login");
-        interceptorSet.add("/registe");
+        //需要拦截的
+        interceptorSet.add("/user/**");
+        interceptorSet.add("/redirectlogin");
         List<String> passSet = new ArrayList<>();
-        //第三方授权
-        passSet.add("/user/**");
-        passSet.add("/redirectlogin");
+       //passset里面是对不需要拦截的方法集合
+        passSet.add("/registe");
+        passSet.add("/login");
 
         //拦截所有请求
         registry.addInterceptor(loginInterceptor()).addPathPatterns(interceptorSet).excludePathPatterns(passSet);
