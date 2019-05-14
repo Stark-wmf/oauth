@@ -1,6 +1,8 @@
 package com.redrock.oauth.controller;
 
+import com.redrock.oauth.entry.CommonException;
 import com.redrock.oauth.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -24,6 +27,16 @@ public class UserController {
      */
     @RequestMapping("/getCode")
     public Object getCode(String redic_url, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            userService.authorizationRedirect(response,redic_url);
+        }catch (IOException e){
+            log.error("IO异常={}",e.getMessage(),e);
+            throw new CommonException(40001,"IO错误");
+        }catch (ServletException x){
+            log.error("Servlet异常={}",x.getMessage(),x);
+            throw new CommonException(40002,"连接或服务器错误");
+        }
+
             return   userService.authorizationRedirect(response,redic_url);
 
     }
@@ -37,6 +50,14 @@ public class UserController {
      */
     @RequestMapping("/accessToken")
     public Object getAccessToken(String code,String appid) throws Exception {
+
+        try {
+            userService.getAccessToken(code,appid);
+        }catch (Exception e){
+            log.error("获取Acesstoken异常={}",e.getMessage(),e);
+
+            throw new CommonException(500,"内部错误");
+        }
         return userService.getAccessToken(code,appid);
     }
 
@@ -51,6 +72,13 @@ public class UserController {
      */
     @RequestMapping("/getUserInfo")
     public Object getUserInfo(String accessToken,String appid) throws Exception {
+        try {
+            userService.getUserInfo(accessToken,appid);
+        }catch (Exception e){
+            log.error("获取用户信息异常={}",e.getMessage(),e);
+
+            throw new CommonException(500,"内部错误");
+        }
         return userService.getUserInfo(accessToken,appid);
     }
 }
