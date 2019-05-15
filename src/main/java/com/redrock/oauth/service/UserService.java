@@ -15,6 +15,7 @@ import com.redrock.oauth.entry.User;
 import com.redrock.oauth.mapper.UserMapper;
 import com.redrock.oauth.util.Oauth2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
-
+@Service
 public class UserService {
     @Autowired
      private UserMapper userMapper;
@@ -113,4 +114,10 @@ public class UserService {
         res.setHeader("redic_url",redirectUrl+"?"+code);
         return new Response(1,"成功",null);
     }
+
+    public User queryRoleByUsername(int user_id) {
+
+    return userMapper.getUser(user_id);
+
+}
 }

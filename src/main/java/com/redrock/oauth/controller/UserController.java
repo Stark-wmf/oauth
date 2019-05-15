@@ -4,7 +4,9 @@ import com.redrock.oauth.entry.CommonException;
 import com.redrock.oauth.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
@@ -16,6 +18,18 @@ import java.io.IOException;
 public class UserController {
     @Autowired
     private UserService userService;
+
+
+    /**
+     * 测试hello
+     * @return
+     */
+    @RequestMapping(value = "/hello",method = RequestMethod.GET)
+    public String hello(Model model,String username) {
+        model.addAttribute("name", username);
+        return "/hello";
+    }
+
 
     /**
      * 用户登录后得到code值，在res的head里得到redirectUrl+"?"+code
@@ -71,9 +85,10 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping("/getUserInfo")
-    public Object getUserInfo(String accessToken,String appid) throws Exception {
+    public Object getUserInfo(String accessToken, String appid) throws Exception {
         try {
             userService.getUserInfo(accessToken,appid);
+
         }catch (Exception e){
             log.error("获取用户信息异常={}",e.getMessage(),e);
 
